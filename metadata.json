@@ -1,0 +1,6 @@
+{
+  "name": "Science Explorer",
+  "description": "An interactive, friendly science learning web app for students covering Digestion, Solar System, Living vs Non-Living, Plants, and Pollution.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
