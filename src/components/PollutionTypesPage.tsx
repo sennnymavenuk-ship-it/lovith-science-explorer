@@ -24,6 +24,29 @@ interface PollutionTypesPageProps {
   completedTipsCount: number;
 }
 
+const POLLUTION_PHOTOS: Record<string, { url: string; alt: string }> = {
+  air: {
+    url: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=800',
+    alt: 'Clean blue sky with green renewable wind turbine energy',
+  },
+  water: {
+    url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
+    alt: 'Pristine clean blue ocean water',
+  },
+  land: {
+    url: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&q=80&w=800',
+    alt: 'Green seedling sprout growing in rich fertile soil',
+  },
+  noise: {
+    url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800',
+    alt: 'Quiet peaceful sunlit green forest',
+  },
+  light: {
+    url: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&q=80&w=800',
+    alt: 'Dark starry night sky free of light pollution',
+  },
+};
+
 export const PollutionTypesPage: React.FC<PollutionTypesPageProps> = ({
   checkedTipIds,
   toggleTipCheck,
@@ -49,42 +72,42 @@ export const PollutionTypesPage: React.FC<PollutionTypesPageProps> = ({
   const totalTips = POLLUTION_CATEGORIES.reduce((acc, cat) => acc + cat.tips.length, 0);
 
   return (
-    <div className="space-y-10 pb-16">
+    <div className="space-y-12 pb-16">
       {/* Header Banner */}
-      <section className="bg-gradient-to-r from-teal-500/15 via-sky-500/15 to-emerald-500/15 p-6 sm:p-8 lg:p-10 rounded-[32px] border-2 border-teal-200/90 shadow-xs">
-        <div className="max-w-4xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-teal-100 text-teal-900 rounded-full text-xs font-bold border border-teal-200">
-            <ShieldAlert className="w-4 h-4 text-teal-600" />
+      <section className="bg-gradient-to-r from-teal-500/20 via-sky-500/20 to-emerald-500/20 p-8 sm:p-10 lg:p-12 rounded-[36px] border-2 border-cyan-400/40 shadow-xl">
+        <div className="max-w-4xl space-y-4">
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-teal-950/80 text-cyan-300 rounded-full text-sm font-black border border-cyan-400/40 shadow-md">
+            <ShieldAlert className="w-5 h-5 text-cyan-400" />
             <span>Environmental Science & Conservation</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            5 Major Pollution Types & Practical Solutions
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight">
+            Pollution Types & Eco Solutions 🌍
           </h1>
-          <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-slate-200 font-bold leading-relaxed">
             Pollution occurs when harmful substances or contaminants enter our natural environment. Learn about Air, Water, Land, Noise, and Light pollution, understand their root causes and environmental impact, and track your daily actions to help protect Earth!
           </p>
         </div>
       </section>
 
       {/* Interactive Eco-Action Tracker Counter */}
-      <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700 text-white p-6 sm:p-8 rounded-[32px] shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6 border-2 border-white/20">
-        <div className="space-y-1.5 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-2 text-amber-300 font-extrabold text-xs">
-            <Award className="w-5 h-5 text-amber-300" />
+      <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-700 text-white p-8 sm:p-10 rounded-[36px] shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-6 border-2 border-cyan-400/40">
+        <div className="space-y-2 text-center sm:text-left">
+          <div className="flex items-center justify-center sm:justify-start gap-2 text-amber-300 font-black text-sm">
+            <Award className="w-6 h-6 text-amber-300 animate-bounce" />
             <span>Student Environmental Action Tracker</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black">Your Personal Eco Impact Score</h2>
-          <p className="text-xs text-emerald-100 max-w-md font-medium">
+          <h2 className="text-3xl sm:text-4xl font-black text-white">Your Personal Eco Impact Score</h2>
+          <p className="text-sm text-cyan-100 max-w-md font-bold">
             Check off the practical tips you practice in your daily life to earn points and help reduce environmental pollution!
           </p>
         </div>
 
-        <div className="flex items-center gap-4 bg-white/15 backdrop-blur-md px-6 py-4.5 rounded-2xl border-2 border-white/30 shrink-0 shadow-md">
+        <div className="flex items-center gap-5 bg-slate-950/80 px-7 py-5 rounded-3xl border-2 border-cyan-400/40 shrink-0 shadow-xl">
           <div className="text-center">
-            <span className="text-3xl font-black text-amber-300">{completedTipsCount}</span>
-            <span className="text-xs text-emerald-100 font-bold block">/ {totalTips} Completed</span>
+            <span className="text-4xl font-black text-amber-300">{completedTipsCount}</span>
+            <span className="text-xs text-cyan-300 font-black block">/ {totalTips} Completed</span>
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-xl shadow-md border border-amber-300">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 text-slate-950 flex items-center justify-center font-black text-2xl shadow-lg border-2 border-white">
             🏆
           </div>
         </div>
@@ -93,50 +116,59 @@ export const PollutionTypesPage: React.FC<PollutionTypesPageProps> = ({
       {/* Grid of 5 Pollution Types Cards */}
       <section className="space-y-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <ShieldAlert className="w-5 h-5 text-cyan-600" />
+          <h2 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-3">
+            <ShieldAlert className="w-7 h-7 text-cyan-400" />
             Detailed Breakdown of Pollution Categories
           </h2>
-          <span className="text-xs text-slate-500">Causes, Effects & Action Checklists</span>
+          <span className="text-xs sm:text-sm text-cyan-300/80 font-bold hidden sm:inline">Causes, Effects & Action Checklists</span>
         </div>
 
         <div className="grid grid-cols-1 gap-8">
-          {POLLUTION_CATEGORIES.map((pollution) => (
-            <div
-              key={pollution.id}
-              className={`bg-white rounded-[32px] p-6 sm:p-8 border-2 shadow-xs space-y-6 ${pollution.color}`}
-            >
-              {/* Card Header */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className={`p-3.5 rounded-2xl ${pollution.bgColor} shadow-2xs font-bold`}>
-                    {getPollutionIcon(pollution.iconName)}
-                  </div>
-                  <div>
-                    <h3 className="text-xl sm:text-2xl font-black text-slate-900">{pollution.name}</h3>
-                    <p className="text-xs text-slate-600 font-bold">
-                      Environmental Contamination Category
-                    </p>
+          {POLLUTION_CATEGORIES.map((pollution) => {
+            const photo = POLLUTION_PHOTOS[pollution.id];
+            return (
+              <div
+                key={pollution.id}
+                className="bg-slate-900/90 rounded-[36px] overflow-hidden border-2 border-cyan-400/30 shadow-xl space-y-6 text-white"
+              >
+                {/* Photo Header */}
+                <div className="relative h-44 sm:h-52 overflow-hidden border-b border-indigo-500/30">
+                  {photo && (
+                    <img
+                      src={photo.url}
+                      alt={photo.alt}
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3 bg-slate-950/80 backdrop-blur-md px-4 py-2 rounded-2xl border border-cyan-400/40 shadow-md">
+                      <div className="p-1.5 rounded-xl bg-slate-900 font-black">
+                        {getPollutionIcon(pollution.iconName)}
+                      </div>
+                      <span className="text-lg font-black text-white">{pollution.name}</span>
+                    </div>
+
+                    <div className="px-4 py-2 bg-slate-950/80 backdrop-blur-md rounded-full text-xs font-black text-amber-300 border border-amber-400/40 shadow-md">
+                      {pollution.tips.length} Action Tips
+                    </div>
                   </div>
                 </div>
 
-                <div className="px-3.5 py-1.5 bg-slate-100/90 rounded-full text-xs font-extrabold text-slate-700 border border-slate-200">
-                  {pollution.tips.length} Practical Action Tips
-                </div>
-              </div>
-
-              {/* Causes vs Effects Side-by-Side */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div className="p-7 sm:p-9 space-y-6 pt-0">
+                  {/* Causes vs Effects Side-by-Side */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
                 {/* Causes Box */}
-                <div className="p-4.5 bg-rose-50/80 rounded-2xl border-2 border-rose-200 space-y-2">
-                  <div className="flex items-center gap-2 text-rose-900 font-black text-sm">
-                    <Flame className="w-4.5 h-4.5 text-rose-600" />
+                <div className="p-5 bg-rose-950/70 rounded-3xl border-2 border-rose-500/40 space-y-3 shadow-md">
+                  <div className="flex items-center gap-2 text-rose-300 font-black text-base">
+                    <Flame className="w-5 h-5 text-rose-400" />
                     <span>Primary Causes:</span>
                   </div>
-                  <ul className="space-y-1.5 text-slate-800 font-semibold">
+                  <ul className="space-y-2 text-rose-100 font-bold">
                     {pollution.causes.map((cause, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="text-rose-500 font-black">•</span>
+                        <span className="text-rose-400 font-black">•</span>
                         <span>{cause}</span>
                       </li>
                     ))}
@@ -144,15 +176,15 @@ export const PollutionTypesPage: React.FC<PollutionTypesPageProps> = ({
                 </div>
 
                 {/* Effects Box */}
-                <div className="p-4.5 bg-amber-50/80 rounded-2xl border-2 border-amber-200 space-y-2">
-                  <div className="flex items-center gap-2 text-amber-900 font-black text-sm">
-                    <AlertTriangle className="w-4.5 h-4.5 text-amber-600" />
+                <div className="p-5 bg-amber-950/70 rounded-3xl border-2 border-amber-500/40 space-y-3 shadow-md">
+                  <div className="flex items-center gap-2 text-amber-300 font-black text-base">
+                    <AlertTriangle className="w-5 h-5 text-amber-400" />
                     <span>Environmental & Health Effects:</span>
                   </div>
-                  <ul className="space-y-1.5 text-slate-800 font-semibold">
+                  <ul className="space-y-2 text-amber-100 font-bold">
                     {pollution.effects.map((effect, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="text-amber-600 font-black">•</span>
+                        <span className="text-amber-400 font-black">•</span>
                         <span>{effect}</span>
                       </li>
                     ))}
@@ -161,41 +193,41 @@ export const PollutionTypesPage: React.FC<PollutionTypesPageProps> = ({
               </div>
 
               {/* Ways to Avoid/Reduce Checklist */}
-              <div className="p-5 sm:p-6 bg-emerald-50/80 rounded-[28px] border-2 border-emerald-300 space-y-3.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-emerald-950 font-black text-sm">
-                    <Leaf className="w-4.5 h-4.5 text-emerald-600" />
+              <div className="p-6 sm:p-7 bg-emerald-950/70 rounded-[32px] border-2 border-emerald-400/40 space-y-4 shadow-lg">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2.5 text-emerald-300 font-black text-base">
+                    <Leaf className="w-5 h-5 text-emerald-400" />
                     <span>Ways to Avoid / Reduce {pollution.name} (Checklist)</span>
                   </div>
-                  <span className="text-[11px] text-emerald-800 font-bold bg-white px-2.5 py-1 rounded-lg border border-emerald-200">
+                  <span className="text-xs text-emerald-300 font-black bg-slate-950 px-3 py-1 rounded-xl border border-emerald-400/40">
                     Click box to track action
                   </span>
                 </div>
 
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   {pollution.tips.map((tip) => {
                     const isChecked = !!checkedTipIds[tip.id];
                     return (
                       <div
                         key={tip.id}
                         onClick={() => toggleTipCheck(tip.id)}
-                        className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
+                        className={`p-4 rounded-2xl border-2 transition-all cursor-pointer flex items-start gap-3.5 ${
                           isChecked
-                            ? 'bg-emerald-100/90 border-emerald-500 text-emerald-950 font-bold shadow-2xs'
-                            : 'bg-white border-slate-200 text-slate-800 hover:border-emerald-400'
+                            ? 'bg-emerald-900/90 border-emerald-400 text-white font-bold shadow-md scale-101'
+                            : 'bg-slate-950 border-indigo-500/30 text-slate-200 hover:border-emerald-400/60'
                         }`}
                       >
-                        <button className="pt-0.5 shrink-0 text-emerald-600">
+                        <button className="pt-0.5 shrink-0 text-emerald-400">
                           {isChecked ? (
-                            <CheckSquare className="w-5 h-5 text-emerald-600 font-bold" />
+                            <CheckSquare className="w-6 h-6 text-emerald-400 font-black" />
                           ) : (
-                            <Square className="w-5 h-5 text-slate-400" />
+                            <Square className="w-6 h-6 text-slate-500" />
                           )}
                         </button>
 
-                        <div className="flex-1 space-y-0.5">
-                          <p className="text-xs leading-snug font-bold">{tip.text}</p>
-                          <p className="text-[11px] text-emerald-800 font-semibold">
+                        <div className="flex-1 space-y-1">
+                          <p className="text-sm leading-snug font-black text-white">{tip.text}</p>
+                          <p className="text-xs text-cyan-300 font-bold">
                             💡 <em>Impact:</em> {tip.impact}
                           </p>
                         </div>
@@ -205,7 +237,9 @@ export const PollutionTypesPage: React.FC<PollutionTypesPageProps> = ({
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        );
+      })}
         </div>
       </section>
     </div>

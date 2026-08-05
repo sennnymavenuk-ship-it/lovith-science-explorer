@@ -29,7 +29,7 @@ export default function App() {
   const completedEcoTipsCount = Object.values(checkedTipIds).filter(Boolean).length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-sky-50/20 to-slate-100 text-slate-800 font-sans flex flex-col selection:bg-sky-200 selection:text-sky-900">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-indigo-950 to-purple-950 text-slate-100 font-sans flex flex-col selection:bg-cyan-400 selection:text-slate-950">
       {/* Top Navbar */}
       <Navbar
         activeTopic={activeTopic}
@@ -38,7 +38,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
         {activeTopic === 'home' && <HomePage setActiveTopic={setActiveTopic} />}
         {activeTopic === 'digestive' && <DigestiveSystemPage />}
         {activeTopic === 'solar' && <SolarSystemPage />}
@@ -57,10 +57,10 @@ export default function App() {
       <div className="fixed bottom-6 right-6 z-40">
         <button
           onClick={() => setIsQuizOpen(true)}
-          className="flex items-center gap-2.5 px-5 py-3.5 bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 hover:from-sky-700 hover:to-emerald-700 text-white font-bold rounded-full shadow-xl shadow-sky-500/25 hover:scale-105 transition-all text-xs sm:text-sm group border border-white/20"
+          className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-amber-400 hover:from-cyan-300 hover:to-amber-300 text-slate-950 font-black rounded-full shadow-2xl shadow-cyan-500/40 hover:scale-110 transition-all text-sm sm:text-base tracking-wide border-2 border-white/50 animate-bounce"
         >
-          <HelpCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-          <span>Take Science Quiz</span>
+          <HelpCircle className="w-6 h-6 animate-pulse" />
+          <span>🚀 Take Science Quiz</span>
         </button>
       </div>
 

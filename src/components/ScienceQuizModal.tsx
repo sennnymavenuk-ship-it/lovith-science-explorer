@@ -56,23 +56,23 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-[32px] shadow-2xl max-w-xl w-full p-6 sm:p-8 border-2 border-sky-200 animate-in zoom-in-95 duration-150 space-y-6 relative overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="bg-slate-900 rounded-[36px] shadow-2xl max-w-xl w-full p-7 sm:p-9 border-2 border-cyan-400/40 space-y-6 relative overflow-hidden text-white">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-tr from-sky-500 to-indigo-600 text-white rounded-2xl shadow-xs">
-              <HelpCircle className="w-5 h-5" />
+        <div className="flex items-center justify-between border-b border-indigo-500/30 pb-4">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3 bg-gradient-to-tr from-cyan-400 to-indigo-500 text-slate-950 rounded-2xl shadow-md font-black">
+              <HelpCircle className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="text-lg sm:text-xl font-black text-slate-900">Student Science Explorer Quiz</h3>
-              <p className="text-xs font-bold text-slate-500">Test your knowledge across all 5 topics</p>
+              <h3 className="text-xl sm:text-2xl font-black text-white">Student Science Quiz 🧪</h3>
+              <p className="text-xs font-bold text-cyan-300/80">Test your knowledge across all 5 topics!</p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors border border-slate-200/80"
+            className="p-2.5 text-slate-400 hover:text-white bg-slate-950 hover:bg-slate-800 rounded-2xl transition-colors border border-indigo-500/30"
           >
             <X className="w-5 h-5" />
           </button>
@@ -81,16 +81,16 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
         {!quizFinished ? (
           <div className="space-y-6">
             {/* Progress bar */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold text-slate-500">
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs sm:text-sm font-black text-cyan-300">
                 <span>
                   Question {currentQuestionIndex + 1} of {QUIZ_QUESTIONS.length}
                 </span>
-                <span>Score: {score}</span>
+                <span className="text-amber-300">Score: {score}</span>
               </div>
-              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-indigo-500/30">
                 <div
-                  className="h-full bg-gradient-to-r from-sky-500 to-teal-500 transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-lime-400 transition-all duration-300"
                   style={{
                     width: `${((currentQuestionIndex + 1) / QUIZ_QUESTIONS.length) * 100}%`,
                   }}
@@ -99,28 +99,28 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
             </div>
 
             {/* Question Text */}
-            <h4 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+            <h4 className="text-lg sm:text-xl font-black text-white leading-snug">
               {q.question}
             </h4>
 
             {/* Options List */}
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {q.options.map((opt, idx) => {
                 const isSelected = selectedAnswerIndex === idx;
                 const isCorrect = idx === q.correctIndex;
 
                 let btnStyle =
-                  'bg-slate-50 border-slate-200 text-slate-800 hover:border-sky-300 hover:bg-slate-100/80';
+                  'bg-slate-950 border-indigo-500/30 text-slate-200 hover:border-cyan-400 hover:bg-slate-800';
                 if (isSubmitted) {
                   if (isCorrect) {
-                    btnStyle = 'bg-emerald-100 border-emerald-400 text-emerald-950 font-bold';
+                    btnStyle = 'bg-emerald-950 border-emerald-400 text-emerald-300 font-black shadow-md';
                   } else if (isSelected) {
-                    btnStyle = 'bg-rose-100 border-rose-400 text-rose-950 font-bold';
+                    btnStyle = 'bg-rose-950 border-rose-500 text-rose-300 font-black shadow-md';
                   } else {
-                    btnStyle = 'bg-slate-50 border-slate-200 text-slate-400 opacity-60';
+                    btnStyle = 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-50';
                   }
                 } else if (isSelected) {
-                  btnStyle = 'bg-sky-50 border-sky-400 text-sky-900 font-bold ring-2 ring-sky-200';
+                  btnStyle = 'bg-cyan-950 border-cyan-400 text-cyan-200 font-black ring-2 ring-cyan-400 shadow-md';
                 }
 
                 return (
@@ -128,14 +128,14 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
                     key={idx}
                     type="button"
                     onClick={() => handleSelectOption(idx)}
-                    className={`w-full p-3.5 rounded-2xl border text-left text-xs sm:text-sm transition-all flex items-center justify-between ${btnStyle}`}
+                    className={`w-full p-4 rounded-2xl border-2 text-left text-sm transition-all flex items-center justify-between font-bold ${btnStyle}`}
                   >
                     <span>{opt}</span>
                     {isSubmitted && isCorrect && (
-                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                      <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
                     )}
                     {isSubmitted && isSelected && !isCorrect && (
-                      <XCircle className="w-5 h-5 text-rose-600 shrink-0" />
+                      <XCircle className="w-6 h-6 text-rose-400 shrink-0" />
                     )}
                   </button>
                 );
@@ -144,8 +144,8 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
 
             {/* Explanation box after submit */}
             {isSubmitted && (
-              <div className="p-4 bg-sky-50 border border-sky-200 rounded-2xl text-xs text-sky-950 space-y-1 animate-in fade-in duration-200">
-                <span className="font-bold block text-sky-900">Explanation:</span>
+              <div className="p-4.5 bg-cyan-950/80 border-2 border-cyan-400/40 rounded-2xl text-xs sm:text-sm text-cyan-100 space-y-1 animate-in fade-in duration-200 font-bold">
+                <span className="font-black block text-cyan-300">Explanation:</span>
                 <p className="leading-relaxed">{q.explanation}</p>
               </div>
             )}
@@ -157,7 +157,7 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
                   type="button"
                   disabled={selectedAnswerIndex === null}
                   onClick={handleSubmitAnswer}
-                  className="px-5 py-2.5 bg-sky-600 hover:bg-sky-700 disabled:opacity-50 text-white font-semibold text-xs rounded-xl shadow-xs transition-all"
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 disabled:opacity-50 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition-all"
                 >
                   Submit Answer
                 </button>
@@ -165,7 +165,7 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
                 <button
                   type="button"
                   onClick={handleNextQuestion}
-                  className="px-5 py-2.5 bg-gradient-to-r from-sky-600 to-teal-600 text-white font-semibold text-xs rounded-xl shadow-xs transition-all"
+                  className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 text-slate-950 font-black text-sm rounded-2xl shadow-lg transition-all"
                 >
                   {currentQuestionIndex < QUIZ_QUESTIONS.length - 1
                     ? 'Next Question →'
@@ -177,29 +177,29 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
         ) : (
           /* Results View */
           <div className="text-center space-y-6 py-4">
-            <div className="w-16 h-16 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto shadow-md">
-              <Award className="w-10 h-10" />
+            <div className="w-20 h-20 rounded-3xl bg-amber-400/20 text-amber-300 flex items-center justify-center mx-auto border-2 border-amber-400/40 shadow-xl">
+              <Award className="w-12 h-12" />
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-2xl font-extrabold text-slate-900">Quiz Completed!</h4>
-              <p className="text-sm text-slate-600">
-                You scored <strong className="text-sky-600">{score}</strong> out of{' '}
+              <h4 className="text-3xl font-black text-white">Quiz Completed! 🎉</h4>
+              <p className="text-base text-slate-300 font-bold">
+                You scored <strong className="text-amber-300 text-xl">{score}</strong> out of{' '}
                 <strong>{QUIZ_QUESTIONS.length}</strong> questions correctly!
               </p>
             </div>
 
-            <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-900 leading-relaxed font-medium">
+            <div className="p-5 bg-emerald-950/80 rounded-3xl border-2 border-emerald-400/40 text-sm text-emerald-200 leading-relaxed font-bold">
               {score >= 4
                 ? '🌟 Master Scientist! You have a great grasp on human biology, astronomy, living traits, plants, and environmental science.'
                 : '🌱 Good Effort! Revisit the topic pages to review digestive steps, planetary orbits, plant parts, and eco tips!'}
             </div>
 
-            <div className="flex justify-center gap-3">
+            <div className="flex justify-center gap-4">
               <button
                 type="button"
                 onClick={handleRestart}
-                className="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold rounded-xl flex items-center gap-1.5"
+                className="px-5 py-3 bg-slate-950 border-2 border-indigo-500/30 hover:bg-slate-800 text-white text-xs sm:text-sm font-black rounded-2xl flex items-center gap-2"
               >
                 <RotateCcw className="w-4 h-4" />
                 <span>Try Quiz Again</span>
@@ -208,7 +208,7 @@ export const ScienceQuizModal: React.FC<ScienceQuizModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2.5 bg-sky-600 text-white text-xs font-semibold rounded-xl shadow-xs hover:bg-sky-700"
+                className="px-6 py-3 bg-gradient-to-r from-cyan-400 to-emerald-400 hover:from-cyan-300 hover:to-emerald-300 text-slate-950 text-xs sm:text-sm font-black rounded-2xl shadow-md"
               >
                 Done
               </button>

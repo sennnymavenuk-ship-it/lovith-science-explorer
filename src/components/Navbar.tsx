@@ -60,29 +60,29 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-sky-100/80 shadow-xs">
+    <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-indigo-500/30 shadow-lg shadow-indigo-950/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-20 sm:h-24">
           {/* Logo & Brand */}
           <div
             onClick={() => setActiveTopic('home')}
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-3.5 cursor-pointer group"
           >
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sky-600 via-teal-500 to-emerald-400 flex items-center justify-center text-white shadow-md shadow-sky-300/40 group-hover:scale-105 transition-all">
-              <Compass className="w-6 h-6 animate-spin-slow" />
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-400 via-fuchsia-500 to-amber-400 flex items-center justify-center text-slate-950 shadow-lg shadow-cyan-500/30 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+              <Compass className="w-7 h-7 animate-spin-slow text-slate-950" />
             </div>
             <div>
-              <span className="text-xl sm:text-2xl font-black tracking-tight bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 bg-clip-text text-transparent">
+              <span className="text-2xl sm:text-3xl font-black tracking-tight bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-300 bg-clip-text text-transparent">
                 Science Explorer
               </span>
-              <span className="block text-xs font-semibold text-slate-500">
-                Interactive Learning for Curious Minds
+              <span className="block text-xs sm:text-sm font-bold text-cyan-300/80">
+                ✨ Interactive Learning for Curious Minds
               </span>
             </div>
           </div>
 
           {/* Desktop Nav Items */}
-          <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 bg-slate-100/70 p-1.5 rounded-2xl border border-slate-200/80">
+          <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 bg-slate-900/90 p-2 rounded-2xl border border-indigo-500/30 shadow-inner">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTopic === item.id;
@@ -90,15 +90,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setActiveTopic(item.id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-200 ${
                     isActive
-                      ? 'bg-white text-sky-700 shadow-xs border border-sky-200 scale-[1.02]'
-                      : 'text-slate-600 hover:text-sky-600 hover:bg-white/60'
+                      ? 'bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500 text-white shadow-md shadow-cyan-500/25 scale-[1.05] border border-white/20'
+                      : 'text-slate-300 hover:text-cyan-300 hover:bg-slate-800/80'
                   }`}
                 >
                   <Icon
                     className={`w-4 h-4 ${
-                      isActive ? 'text-sky-600' : 'text-slate-400'
+                      isActive ? 'text-amber-300 animate-bounce' : 'text-cyan-400'
                     }`}
                   />
                   {item.label}
@@ -111,20 +111,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowSearchModal(true)}
-              className="px-3 py-2 text-slate-600 hover:text-sky-600 hover:bg-sky-50 bg-slate-50 rounded-xl transition-all flex items-center gap-2 text-xs font-bold border border-slate-200/80 shadow-2xs hover:border-sky-300"
+              className="px-4 py-2.5 text-slate-200 hover:text-cyan-300 hover:bg-slate-800 bg-slate-900 rounded-2xl transition-all flex items-center gap-2 text-xs sm:text-sm font-black border border-indigo-500/40 shadow-md hover:border-cyan-400"
               title="Search topics"
             >
-              <Search className="w-4 h-4 text-sky-500" />
+              <Search className="w-4 h-4 text-cyan-400" />
               <span className="hidden sm:inline">Search...</span>
             </button>
 
             {completedEcoTipsCount > 0 && (
               <div
                 onClick={() => setActiveTopic('pollution')}
-                className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500 text-white border border-emerald-400 rounded-full text-xs font-bold shadow-xs hover:bg-emerald-600 transition-colors"
+                className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-emerald-400 to-teal-400 text-slate-950 border border-emerald-300 rounded-full text-xs sm:text-sm font-black shadow-lg shadow-emerald-500/30 hover:scale-105 transition-all"
                 title="Eco Action Points Earned!"
               >
-                <Award className="w-3.5 h-3.5 text-amber-300" />
+                <Award className="w-4 h-4 text-amber-900" />
                 <span>{completedEcoTipsCount} Eco Actions</span>
               </div>
             )}
@@ -132,10 +132,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+              className="md:hidden p-2.5 text-slate-200 hover:bg-slate-800 rounded-xl border border-indigo-500/30"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-6 h-6 text-cyan-400" /> : <Menu className="w-6 h-6 text-cyan-400" />}
             </button>
           </div>
         </div>
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-sky-100 px-4 pt-2 pb-4 space-y-1 animate-in slide-in-from-top duration-200">
+        <div className="md:hidden bg-slate-950/95 border-b border-indigo-500/40 px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTopic === item.id;
@@ -154,13 +154,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setActiveTopic(item.id);
                   setMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-black transition-all ${
                   isActive
-                    ? 'bg-sky-50 text-sky-700 font-semibold border border-sky-200'
-                    : 'text-slate-600 hover:bg-slate-50'
+                    ? 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white border border-cyan-300/40 shadow-md'
+                    : 'text-slate-300 hover:bg-slate-900'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-sky-600' : 'text-slate-400'}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'text-amber-300' : 'text-cyan-400'}`} />
                 {item.label}
               </button>
             );
@@ -170,16 +170,16 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Quick Search Modal */}
       {showSearchModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-start justify-center pt-20 px-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-5 border border-sky-100 animate-in fade-in zoom-in-95 duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
-              <div className="flex items-center gap-2 text-sky-700 font-semibold text-base">
-                <BookOpen className="w-5 h-5 text-sky-500" />
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-start justify-center pt-20 px-4">
+          <div className="bg-slate-900/95 rounded-3xl shadow-2xl max-w-lg w-full p-6 border-2 border-cyan-500/40 text-slate-100 animate-in fade-in zoom-in-95 duration-150 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-indigo-500/30">
+              <div className="flex items-center gap-2.5 text-cyan-300 font-black text-lg">
+                <BookOpen className="w-6 h-6 text-fuchsia-400" />
                 Search Science Topics
               </div>
               <button
                 onClick={() => setShowSearchModal(false)}
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg"
+                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -187,18 +187,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <form onSubmit={handleSearch} className="space-y-4">
               <div className="relative">
-                <Search className="w-5 h-5 absolute left-3 top-3.5 text-slate-400" />
+                <Search className="w-5 h-5 absolute left-4 top-4 text-cyan-400" />
                 <input
                   type="text"
                   placeholder="e.g. Stomach, Mars, Photosynthesis, Air Pollution..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-sm"
+                  className="w-full pl-12 pr-4 py-3.5 bg-slate-950 border-2 border-indigo-500/40 rounded-2xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 text-base font-bold"
                   autoFocus
                 />
               </div>
 
-              <div className="text-xs text-slate-500">
+              <div className="text-xs sm:text-sm text-slate-300 font-bold">
                 Popular searches:
                 <div className="flex flex-wrap gap-2 mt-2">
                   {['Digestion', 'Planets', 'Living Characteristics', 'Plant Parts', 'Pollution Tips'].map(
@@ -209,7 +209,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         onClick={() => {
                           setSearchQuery(term);
                         }}
-                        className="px-2.5 py-1 bg-sky-50 text-sky-700 hover:bg-sky-100 rounded-md text-xs transition-colors"
+                        className="px-3 py-1.5 bg-indigo-950 text-cyan-300 hover:bg-cyan-500 hover:text-slate-950 rounded-xl text-xs sm:text-sm font-extrabold border border-indigo-500/40 transition-all"
                       >
                         {term}
                       </button>
@@ -218,19 +218,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-3 pt-3 border-t border-indigo-500/30">
                 <button
                   type="button"
                   onClick={() => setShowSearchModal(false)}
-                  className="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg"
+                  className="px-5 py-2.5 text-sm font-bold text-slate-300 hover:bg-slate-800 rounded-xl"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-xs font-semibold text-white bg-sky-600 hover:bg-sky-700 rounded-lg shadow-xs"
+                  className="px-6 py-2.5 text-sm font-black text-slate-950 bg-gradient-to-r from-cyan-400 to-fuchsia-400 hover:from-cyan-300 hover:to-fuchsia-300 rounded-xl shadow-lg shadow-cyan-500/30"
                 >
-                  Go to Topic
+                  Go to Topic 🚀
                 </button>
               </div>
             </form>

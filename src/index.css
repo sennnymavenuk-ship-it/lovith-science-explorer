@@ -1,1 +1,23 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,600;0,700;0,800;0,900;1,700&display=swap');
+
+@layer base {
+  body {
+    font-family: 'Fredoka', 'Nunito', system-ui, -apple-system, sans-serif;
+    background-color: #030712;
+    color: #f3f4f6;
+  }
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 20s linear infinite;
+}
