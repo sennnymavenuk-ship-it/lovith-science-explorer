@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TopicId } from '../types';
 import { QUICK_TOPICS, DIGESTION_FACTS } from '../data/scienceData';
+import { WorldClock } from './WorldClock';
 import {
   Compass,
   ArrowRight,
@@ -268,6 +269,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
           })}
         </div>
       </section>
+
+      {/* World Clock */}
+      <WorldClock />
 
       {/* Daily Science Curiosity Box */}
       <section className="max-w-4xl mx-auto px-4">

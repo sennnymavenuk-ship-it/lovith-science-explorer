@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Globe } from 'lucide-react';
+import { TopicId } from '../types';
 import { CONTINENTS } from '../data/socialStudiesData';
 import { IndiaMap } from './IndiaMap';
 
-export const SocialStudiesPage: React.FC = () => {
+   interface SocialStudiesPageProps {
+     setActiveTopic: (topic: TopicId) => void;
+   }
+
+export const SocialStudiesPage: React.FC<SocialStudiesPageProps> = ({ setActiveTopic }) => {
   const [selectedId, setSelectedId] = useState('asia');
 
   const selected = CONTINENTS.find((c) => c.id === selectedId)!;
@@ -24,6 +29,7 @@ export const SocialStudiesPage: React.FC = () => {
           <p className="text-base sm:text-lg text-slate-200 font-bold leading-relaxed">
             Discover the continents, meet the helpers in our community, and learn how people live and work together.
           </p>
+            <button type="button" onClick={() => setActiveTopic('globe')} className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-orange-400 hover:bg-orange-300 text-slate-950 text-sm sm:text-base font-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-200">🌐 Explore the 3D Globe</button>
         </div>
       </section>
 

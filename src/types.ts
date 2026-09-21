@@ -1,4 +1,4 @@
-export type TopicId = 'home' | 'digestive' | 'solar' | 'living' | 'plants' | 'pollution' | 'social';
+export type TopicId = 'home' | 'digestive' | 'solar' | 'living' | 'plants' | 'pollution' | 'social' | 'globe' | 'quiz';
 
 export interface QuickTopic {
   id: TopicId;

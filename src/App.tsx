@@ -9,7 +9,8 @@ import { LivingNonLivingPage } from './components/LivingNonLivingPage';
 import { PlantsAndUsesPage } from './components/PlantsAndUsesPage';
 import { PollutionTypesPage } from './components/PollutionTypesPage';
 import { ScienceQuizModal } from './components/ScienceQuizModal';
-  import { SocialStudiesPage } from './components/SocialStudiesPage';
+import { SocialStudiesPage } from './components/SocialStudiesPage';
+import { GlobePage } from './components/GlobePage';
 import { HelpCircle } from 'lucide-react';
 
 export default function App() {
@@ -52,7 +53,8 @@ export default function App() {
             completedTipsCount={completedEcoTipsCount}
           />
         )}
-          {activeTopic === 'social' && <SocialStudiesPage />}
+          {activeTopic === 'social' && <SocialStudiesPage setActiveTopic={setActiveTopic} />}
+          {activeTopic === 'globe' && <GlobePage setActiveTopic={setActiveTopic} />}
       </main>
 
       {/* Floating Science Quiz Quick Button */}
