@@ -12,6 +12,7 @@ import {
   X,
   BookOpen,
   Award,
+  Globe,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -36,6 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'living', label: 'Living vs Non-Living', icon: Sparkles },
     { id: 'plants', label: 'Plants & Uses', icon: Leaf },
     { id: 'pollution', label: 'Pollution Types', icon: ShieldAlert },
+      { id: 'social', label: 'Social Studies', icon: Globe },
   ];
 
   const searchIndex = [
@@ -44,6 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { topic: 'living' as TopicId, keyword: 'Living vs Non-Living, Growth, Breathing, Cells, Organisms, Movement' },
     { topic: 'plants' as TopicId, keyword: 'Plants, Roots, Stem, Leaves, Photosynthesis, Flowers, Fruits, Medicinal' },
     { topic: 'pollution' as TopicId, keyword: 'Pollution, Air, Water, Land, Soil, Noise, Light, Recycling, Eco Tips' },
+      { topic: 'social' as TopicId, keyword: 'Social Studies, Continents, Countries, Maps, Community Helpers, Needs and Wants, Rights, Rules' },
   ];
 
   const handleSearch = (e: React.FormEvent) => {

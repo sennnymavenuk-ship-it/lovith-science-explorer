@@ -1,4 +1,4 @@
-export type TopicId = 'home' | 'digestive' | 'solar' | 'living' | 'plants' | 'pollution';
+export type TopicId = 'home' | 'digestive' | 'solar' | 'living' | 'plants' | 'pollution' | 'social';
 
 export interface QuickTopic {
   id: TopicId;
@@ -89,4 +89,29 @@ export interface QuizQuestion {
   correctIndex: number;
   explanation: string;
   topic: TopicId;
+}
+
+export interface Continent {
+  id: string;
+  name: string;
+  emoji: string;
+  sizeRank: number;
+  areaValue: number; // million km², used to draw the size bars
+  people: string;
+  countries: string;
+  famousPlace: string;
+  animals: string;
+  funFact: string;
+  barColor: string;
+  textColor: string;
+}
+
+export interface IndiaRegion {
+  id: string;
+  name: string;
+  type: 'State' | 'Union Territory';
+  capital: string;
+  shapeIds: string[]; // ids of the shapes in the @svg-maps/india package
+  small?: boolean; // too small to tap reliably, so it is left out of the game
+  note?: string;
 }
