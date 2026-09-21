@@ -14,6 +14,7 @@ import {
   Atom,
   HelpCircle,
   Heart,
+  Globe,
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -58,6 +59,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
         return <Leaf className="w-7 h-7 text-emerald-300" />;
       case 'ShieldAlert':
         return <ShieldAlert className="w-7 h-7 text-rose-300" />;
+      case 'Globe':
+        return <Globe className="w-7 h-7 text-orange-300" />;
       default:
         return <Atom className="w-7 h-7 text-cyan-300" />;
     }
@@ -75,6 +78,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
         return 'bg-gradient-to-tr from-emerald-400 to-teal-600 shadow-emerald-500/30';
       case 'ShieldAlert':
         return 'bg-gradient-to-tr from-rose-500 to-pink-600 shadow-rose-500/30';
+      case 'Globe':
+        return 'bg-gradient-to-tr from-orange-500 to-red-500 shadow-orange-500/30';
       default:
         return 'bg-gradient-to-tr from-indigo-500 to-purple-600 shadow-indigo-500/30';
     }
@@ -200,7 +205,7 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
         <div className="flex items-center justify-between">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white flex items-center gap-3">
             <Atom className="w-8 h-8 text-cyan-400 animate-spin-slow" />
-            5 Key Science Topics
+            Key Topics
           </h2>
           <span className="text-xs sm:text-sm font-black px-4 py-2 bg-indigo-950 text-cyan-300 rounded-full border border-cyan-400/40 shadow-md">
             Click any card to begin ⚡
@@ -225,6 +230,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90"
                     />
+                  )}
+                  {!topicImg && (
+                    <div className="w-full h-full bg-gradient-to-br from-orange-500/40 via-amber-500/20 to-rose-500/30 flex items-center justify-center text-7xl" aria-hidden="true">🌍</div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between">

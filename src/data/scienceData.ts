@@ -56,6 +56,15 @@ export const QUICK_TOPICS: QuickTopic[] = [
     bgLight: 'bg-cyan-50 text-cyan-700 border-cyan-200',
     description: 'Understand 5 major pollution types, their causes, and track practical daily tips to protect our planet.',
   },
+  {
+    id: 'social',
+    title: 'Social Studies',
+    tagline: 'Our world and communities',
+    iconName: 'Globe',
+    color: 'from-orange-500 to-amber-600',
+    bgLight: 'bg-orange-50 text-orange-700 border-orange-200',
+    description: 'Explore the 7 continents, compare how big they are, and discover famous places and animals from around the world.',
+  },
 ];
 
 export const DIGESTIVE_STEPS: DigestiveStep[] = [
