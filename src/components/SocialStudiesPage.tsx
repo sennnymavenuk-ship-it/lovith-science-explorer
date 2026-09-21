@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Globe } from 'lucide-react';
 import { CONTINENTS } from '../data/socialStudiesData';
+import { IndiaMap } from './IndiaMap';
 
 export const SocialStudiesPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState('asia');
@@ -111,6 +112,9 @@ export const SocialStudiesPage: React.FC = () => {
           Numbers are rounded. Country counts can differ a little depending on the source.
         </p>
       </section>
+        {/* India Map */}
+      <IndiaMap />
+
     </div>
   );
 };

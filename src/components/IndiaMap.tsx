@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { INDIA_REGIONS } from '../data/socialStudiesData';
+import { INDIA_REGIONS } from '../data/indiaData';
 import { IndiaRegion } from '../types';
 
 // The shape of the data inside the @svg-maps/india package
@@ -385,7 +385,7 @@ export const IndiaMap: React.FC = () => {
 
       <p className="text-xs text-slate-400 font-bold leading-relaxed">
         Map shapes:{' '}
-        
+        <a
           href="https://github.com/VictorCazanave/svg-maps"
           target="_blank"
           rel="noopener noreferrer"
@@ -394,7 +394,7 @@ export const IndiaMap: React.FC = () => {
           svg-maps by Victor Cazanave
         </a>
         , licensed{' '}
-        
+        <a
           href="https://creativecommons.org/licenses/by/4.0/"
           target="_blank"
           rel="noopener noreferrer"
