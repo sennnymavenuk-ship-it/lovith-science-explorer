@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TopicId } from '../types';
 import {
   Compass,
@@ -13,6 +13,11 @@ import {
   BookOpen,
   Award,
   Globe,
+  FlaskConical,
+  ChevronDown,
+  Languages,
+  BookText,
+  Calculator,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -21,24 +26,79 @@ interface NavbarProps {
   completedEcoTipsCount: number;
 }
 
+type NavIcon = React.FC<{ className?: string }>;
+interface SimpleNavItem {
+  kind: 'link';
+  id: TopicId;
+  label: string;
+  icon: NavIcon;
+}
+interface DropdownNavItem {
+  kind: 'dropdown';
+  label: string;
+  icon: NavIcon;
+  items: { id: TopicId; label: string; icon: NavIcon }[];
+}
+type NavEntry = SimpleNavItem | DropdownNavItem;
+
+// The 5 science topics live inside the "Science" dropdown, so the bar itself
+// stays short even as more lessons are added under a subject.
+const SCIENCE_ITEMS = [
+  { id: 'digestive' as TopicId, label: 'Digestive System', icon: Activity },
+  { id: 'solar' as TopicId, label: 'Solar System', icon: Sun },
+  { id: 'living' as TopicId, label: 'Living vs Non-Living', icon: Sparkles },
+  { id: 'plants' as TopicId, label: 'Plants & Uses', icon: Leaf },
+  { id: 'pollution' as TopicId, label: 'Pollution Types', icon: ShieldAlert },
+];
+
+const NAV_ENTRIES: NavEntry[] = [
+  { kind: 'link', id: 'home', label: 'Home', icon: Compass },
+  { kind: 'link', id: 'tamil', label: 'Tamil', icon: Languages },
+  { kind: 'link', id: 'english', label: 'English', icon: BookText },
+  { kind: 'link', id: 'maths', label: 'Maths', icon: Calculator },
+  { kind: 'dropdown', label: 'Science', icon: FlaskConical, items: SCIENCE_ITEMS },
+  { kind: 'link', id: 'social', label: 'Social Studies', icon: Globe },
+];
+
+const SCIENCE_IDS = new Set(SCIENCE_ITEMS.map((i) => i.id));
+
 export const Navbar: React.FC<NavbarProps> = ({
   activeTopic,
   setActiveTopic,
   completedEcoTipsCount,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileScienceOpen, setMobileScienceOpen] = useState(false);
+  const [desktopScienceOpen, setDesktopScienceOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const scienceMenuRef = useRef<HTMLDivElement>(null);
 
-  const navItems: { id: TopicId; label: string; icon: React.FC<{ className?: string }> }[] = [
-    { id: 'home', label: 'Home', icon: Compass },
-    { id: 'digestive', label: 'Digestive System', icon: Activity },
-    { id: 'solar', label: 'Solar System', icon: Sun },
-    { id: 'living', label: 'Living vs Non-Living', icon: Sparkles },
-    { id: 'plants', label: 'Plants & Uses', icon: Leaf },
-    { id: 'pollution', label: 'Pollution Types', icon: ShieldAlert },
-      { id: 'social', label: 'Social Studies', icon: Globe },
-  ];
+  const isScienceActive = SCIENCE_IDS.has(activeTopic);
+
+  // Close the Science dropdown when clicking outside it, or pressing Escape
+  useEffect(() => {
+    if (!desktopScienceOpen) return;
+    const handlePointer = (e: MouseEvent) => {
+      if (scienceMenuRef.current && !scienceMenuRef.current.contains(e.target as Node)) {
+        setDesktopScienceOpen(false);
+      }
+    };
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDesktopScienceOpen(false);
+    };
+    document.addEventListener('mousedown', handlePointer);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handlePointer);
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [desktopScienceOpen]);
+
+  // Close the mobile drawer's Science section again whenever the drawer itself closes
+  useEffect(() => {
+    if (!mobileMenuOpen) setMobileScienceOpen(false);
+  }, [mobileMenuOpen]);
 
   const searchIndex = [
     { topic: 'digestive' as TopicId, keyword: 'Digestive System, Mouth, Stomach, Intestines, Food Path, Digestion' },
@@ -46,7 +106,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     { topic: 'living' as TopicId, keyword: 'Living vs Non-Living, Growth, Breathing, Cells, Organisms, Movement' },
     { topic: 'plants' as TopicId, keyword: 'Plants, Roots, Stem, Leaves, Photosynthesis, Flowers, Fruits, Medicinal' },
     { topic: 'pollution' as TopicId, keyword: 'Pollution, Air, Water, Land, Soil, Noise, Light, Recycling, Eco Tips' },
-      { topic: 'social' as TopicId, keyword: 'Social Studies, Continents, Countries, Maps, Community Helpers, Needs and Wants, Rights, Rules' },
+    { topic: 'social' as TopicId, keyword: 'Social Studies, Continents, Countries, Maps, Community Helpers, Needs and Wants, Rights, Rules' },
+    { topic: 'tamil' as TopicId, keyword: 'Tamil, Tamil Language' },
+    { topic: 'english' as TopicId, keyword: 'English, English Language, Grammar, Reading' },
+    { topic: 'maths' as TopicId, keyword: 'Maths, Mathematics, Numbers, Arithmetic' },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
@@ -61,6 +124,13 @@ export const Navbar: React.FC<NavbarProps> = ({
       setSearchQuery('');
     }
   };
+
+  const linkClass = (isActive: boolean) =>
+    `flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-200 ${
+      isActive
+        ? 'bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500 text-white shadow-md shadow-cyan-500/25 scale-[1.05] border border-white/20'
+        : 'text-slate-300 hover:text-cyan-300 hover:bg-slate-800/80'
+    }`;
 
   return (
     <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-indigo-500/30 shadow-lg shadow-indigo-950/50">
@@ -86,26 +156,64 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Desktop Nav Items */}
           <nav className="hidden md:flex items-center gap-1.5 lg:gap-2 bg-slate-900/90 p-2 rounded-2xl border border-indigo-500/30 shadow-inner">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTopic === item.id;
+            {NAV_ENTRIES.map((entry) => {
+              if (entry.kind === 'link') {
+                const Icon = entry.icon;
+                const isActive = activeTopic === entry.id;
+                return (
+                  <button key={entry.id} onClick={() => setActiveTopic(entry.id)} className={linkClass(isActive)}>
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-amber-300 animate-bounce' : 'text-cyan-400'}`} />
+                    {entry.label}
+                  </button>
+                );
+              }
+
+              const Icon = entry.icon;
               return (
-                <button
-                  key={item.id}
-                  onClick={() => setActiveTopic(item.id)}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-extrabold transition-all duration-200 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500 text-white shadow-md shadow-cyan-500/25 scale-[1.05] border border-white/20'
-                      : 'text-slate-300 hover:text-cyan-300 hover:bg-slate-800/80'
-                  }`}
-                >
-                  <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? 'text-amber-300 animate-bounce' : 'text-cyan-400'
-                    }`}
-                  />
-                  {item.label}
-                </button>
+                <div key={entry.label} className="relative" ref={scienceMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => setDesktopScienceOpen((open) => !open)}
+                    aria-haspopup="menu"
+                    aria-expanded={desktopScienceOpen}
+                    className={linkClass(isScienceActive)}
+                  >
+                    <Icon className={`w-4 h-4 ${isScienceActive ? 'text-amber-300 animate-bounce' : 'text-cyan-400'}`} />
+                    {entry.label}
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${desktopScienceOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {desktopScienceOpen && (
+                    <div
+                      role="menu"
+                      aria-label="Science topics"
+                      className="absolute left-0 top-full mt-2 w-64 p-2 bg-slate-900 border-2 border-indigo-500/30 rounded-2xl shadow-2xl shadow-cyan-950/50 space-y-1 z-50"
+                    >
+                      {entry.items.map((item) => {
+                        const ItemIcon = item.icon;
+                        const isActive = activeTopic === item.id;
+                        return (
+                          <button
+                            key={item.id}
+                            role="menuitem"
+                            onClick={() => {
+                              setActiveTopic(item.id);
+                              setDesktopScienceOpen(false);
+                            }}
+                            className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-extrabold text-left transition-colors ${
+                              isActive
+                                ? 'bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-purple-500 text-white'
+                                : 'text-slate-300 hover:text-cyan-300 hover:bg-slate-800'
+                            }`}
+                          >
+                            <ItemIcon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-300' : 'text-cyan-400'}`} />
+                            {item.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </nav>
@@ -147,25 +255,75 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-slate-950/95 border-b border-indigo-500/40 px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top duration-200">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTopic === item.id;
+          {NAV_ENTRIES.map((entry) => {
+            if (entry.kind === 'link') {
+              const Icon = entry.icon;
+              const isActive = activeTopic === entry.id;
+              return (
+                <button
+                  key={entry.id}
+                  onClick={() => {
+                    setActiveTopic(entry.id);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-black transition-all ${
+                    isActive
+                      ? 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white border border-cyan-300/40 shadow-md'
+                      : 'text-slate-300 hover:bg-slate-900'
+                  }`}
+                >
+                  <Icon className={`w-5 h-5 ${isActive ? 'text-amber-300' : 'text-cyan-400'}`} />
+                  {entry.label}
+                </button>
+              );
+            }
+
+            const Icon = entry.icon;
             return (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setActiveTopic(item.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-xl text-base font-black transition-all ${
-                  isActive
-                    ? 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white border border-cyan-300/40 shadow-md'
-                    : 'text-slate-300 hover:bg-slate-900'
-                }`}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-amber-300' : 'text-cyan-400'}`} />
-                {item.label}
-              </button>
+              <div key={entry.label}>
+                <button
+                  type="button"
+                  onClick={() => setMobileScienceOpen((open) => !open)}
+                  aria-expanded={mobileScienceOpen}
+                  className={`w-full flex items-center justify-between gap-3.5 px-4 py-3 rounded-xl text-base font-black transition-all ${
+                    isScienceActive && !mobileScienceOpen
+                      ? 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white border border-cyan-300/40 shadow-md'
+                      : 'text-slate-300 hover:bg-slate-900'
+                  }`}
+                >
+                  <span className="flex items-center gap-3.5">
+                    <Icon className={`w-5 h-5 ${isScienceActive ? 'text-amber-300' : 'text-cyan-400'}`} />
+                    {entry.label}
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${mobileScienceOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {mobileScienceOpen && (
+                  <div className="mt-1.5 ml-4 pl-3 border-l-2 border-indigo-500/30 space-y-1.5">
+                    {entry.items.map((item) => {
+                      const ItemIcon = item.icon;
+                      const isActive = activeTopic === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            setActiveTopic(item.id);
+                            setMobileMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-black transition-all ${
+                            isActive
+                              ? 'bg-gradient-to-r from-cyan-500 to-fuchsia-500 text-white'
+                              : 'text-slate-300 hover:bg-slate-900'
+                          }`}
+                        >
+                          <ItemIcon className={`w-4 h-4 ${isActive ? 'text-amber-300' : 'text-cyan-400'}`} />
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
@@ -178,7 +336,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             <div className="flex items-center justify-between pb-3 border-b border-indigo-500/30">
               <div className="flex items-center gap-2.5 text-cyan-300 font-black text-lg">
                 <BookOpen className="w-6 h-6 text-fuchsia-400" />
-                Search Science Topics
+                Search Topics
               </div>
               <button
                 onClick={() => setShowSearchModal(false)}

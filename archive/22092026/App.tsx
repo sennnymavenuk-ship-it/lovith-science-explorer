@@ -8,12 +8,9 @@ import { SolarSystemPage } from './components/SolarSystemPage';
 import { LivingNonLivingPage } from './components/LivingNonLivingPage';
 import { PlantsAndUsesPage } from './components/PlantsAndUsesPage';
 import { PollutionTypesPage } from './components/PollutionTypesPage';
+import { ScienceQuizModal } from './components/ScienceQuizModal';
 import { SocialStudiesPage } from './components/SocialStudiesPage';
 import { GlobePage } from './components/GlobePage';
-import { TamilPage } from './components/TamilPage';
-import { EnglishPage } from './components/EnglishPage';
-import { MathsPage } from './components/MathsPage';
-import { ScienceQuizModal } from './components/ScienceQuizModal';
 import { HelpCircle } from 'lucide-react';
 
 export default function App() {
@@ -56,11 +53,8 @@ export default function App() {
             completedTipsCount={completedEcoTipsCount}
           />
         )}
-        {activeTopic === 'social' && <SocialStudiesPage setActiveTopic={setActiveTopic} />}
-        {activeTopic === 'globe' && <GlobePage setActiveTopic={setActiveTopic} />}
-        {activeTopic === 'tamil' && <TamilPage setActiveTopic={setActiveTopic} />}
-        {activeTopic === 'english' && <EnglishPage setActiveTopic={setActiveTopic} />}
-        {activeTopic === 'maths' && <MathsPage setActiveTopic={setActiveTopic} />}
+          {activeTopic === 'social' && <SocialStudiesPage setActiveTopic={setActiveTopic} />}
+          {activeTopic === 'globe' && <GlobePage setActiveTopic={setActiveTopic} />}
       </main>
 
       {/* Floating Science Quiz Quick Button */}
@@ -70,7 +64,7 @@ export default function App() {
           className="flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-amber-400 hover:from-cyan-300 hover:to-amber-300 text-slate-950 font-black rounded-full shadow-2xl shadow-cyan-500/40 hover:scale-110 transition-all text-sm sm:text-base tracking-wide border-2 border-white/50 animate-bounce"
         >
           <HelpCircle className="w-6 h-6 animate-pulse" />
-          <span>🚀 Take a Quiz</span>
+          <span>🚀 Take Science Quiz</span>
         </button>
       </div>
 
