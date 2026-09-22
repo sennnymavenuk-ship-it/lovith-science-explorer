@@ -44,6 +44,24 @@ const DotRow: React.FC<{ count: number; className?: string; faded?: boolean }> =
 );
 
 // ---------- Practice quiz question generator ----------
+type Difficulty = 'ones' | 'tens' | 'hundreds';
+
+const DIFFICULTY_INFO: Record<Difficulty, { label: string; range: string }> = {
+  ones: { label: 'Single Digit', range: '0 – 10' },
+  tens: { label: '2-Digit Numbers', range: '10 – 99' },
+  hundreds: { label: '3-Digit Numbers', range: '100 – 999' },
+};
+
+// The main number in each question is drawn from this range. Multiplication
+// and division keep their second number (the multiplier / divisor) small and
+// single-digit at every level, so the questions stay answerable by hand
+// rather than turning into a calculator exercise.
+const DIFFICULTY_RANGE: Record<Difficulty, [number, number]> = {
+  ones: [0, 10],
+  tens: [10, 99],
+  hundreds: [100, 999],
+};
+
 interface MathQuestion {
   id: string;
   prompt: string;
@@ -69,46 +87,53 @@ function makeDistractors(correct: number, spread: number, min = 0): number[] {
   return [...set];
 }
 
-function generateQuestion(op: OperationId, id: string): MathQuestion {
-  let a: number, b: number, answer: number, spread: number;
+// Distractors scale with the size of the answer, so a 3-digit question gets
+// plausibly-sized wrong options instead of ones that are obviously too small.
+function spreadFor(answer: number): number {
+  return Math.max(3, Math.round(Math.abs(answer) * 0.15));
+}
+
+function generateQuestion(op: OperationId, id: string, difficulty: Difficulty): MathQuestion {
+  const [min, max] = DIFFICULTY_RANGE[difficulty];
+  let a: number, b: number, answer: number;
   switch (op) {
     case 'add':
-      a = randInt(0, 10);
-      b = randInt(0, 10);
+      a = randInt(min, max);
+      b = randInt(min, max);
       answer = a + b;
-      spread = 5;
-      return { id, prompt: `${a} + ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spread), 4) };
+      return { id, prompt: `${a} + ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spreadFor(answer)), 4) };
     case 'subtract':
-      a = randInt(0, 10);
-      b = randInt(0, a); // guarantees a non-negative result
+      a = randInt(min, max);
+      b = randInt(min, a); // guarantees a non-negative result, with b at least as large as the range's minimum
       answer = a - b;
-      spread = 5;
-      return { id, prompt: `${a} − ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spread), 4) };
+      return { id, prompt: `${a} − ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spreadFor(answer || 5)), 4) };
     case 'multiply':
-      a = randInt(1, 10);
-      b = randInt(1, 10);
+      a = randInt(min, max);
+      b = randInt(2, 9); // second factor stays single-digit at every difficulty
       answer = a * b;
-      spread = 10;
-      return { id, prompt: `${a} × ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spread), 4) };
+      return { id, prompt: `${a} × ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spreadFor(answer)), 4) };
     case 'divide':
-    default:
-      b = randInt(1, 10); // divisor, never zero
-      const q = randInt(0, 10);
-      a = b * q; // guarantees an exact division
-      answer = q;
-      spread = 5;
-      return { id, prompt: `${a} ÷ ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spread), 4) };
+    default: {
+      const divisor = randInt(2, 9); // stays single-digit at every difficulty
+      const qMin = Math.ceil(min / divisor);
+      const qMax = Math.floor(max / divisor);
+      const quotient = randInt(qMin, qMax);
+      a = divisor * quotient;
+      b = divisor;
+      answer = quotient;
+      return { id, prompt: `${a} ÷ ${b} = ?`, answer, options: pickRandom(makeDistractors(answer, spreadFor(answer || 5)), 4) };
+    }
   }
 }
 
-const QUIZ_ROUNDS = 8;
+const QUIZ_ROUNDS = 10;
 
-function buildQuiz(): MathQuestion[] {
-  const ops: OperationId[] = pickRandom(
-    (['add', 'add', 'subtract', 'subtract', 'multiply', 'multiply', 'divide', 'divide'] as OperationId[]),
-    QUIZ_ROUNDS
-  );
-  return ops.map((op, i) => generateQuestion(op, `${op}-${i}`));
+function buildQuiz(difficulty: Difficulty): MathQuestion[] {
+  // A pool with 3 of each operation, then a random 10 drawn from it, so every
+  // quiz has a good, slightly-shuffled mix of all four operations.
+  const pool: OperationId[] = (['add', 'subtract', 'multiply', 'divide'] as OperationId[]).flatMap((op) => [op, op, op]);
+  const ops = pickRandom(pool, QUIZ_ROUNDS);
+  return ops.map((op, i) => generateQuestion(op, `${op}-${i}`, difficulty));
 }
 
 export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
@@ -121,6 +146,7 @@ export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [difficulty, setDifficulty] = useState<Difficulty>('ones');
 
   const colors = OP_COLOR[operation];
 
@@ -159,7 +185,7 @@ export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
 
   // ---------- Quiz handlers ----------
   const startQuiz = () => {
-    setQuiz(buildQuiz());
+    setQuiz(buildQuiz(difficulty));
     setIndex(0);
     setPicked(null);
     setScore(0);
@@ -402,10 +428,40 @@ export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
           )}
         </div>
 
+        {!quiz && (
+          <div className="space-y-2">
+            <p className="text-xs font-black text-slate-400 uppercase tracking-wide">Choose a difficulty</p>
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Choose a quiz difficulty">
+              {(Object.keys(DIFFICULTY_INFO) as Difficulty[]).map((d) => {
+                const info = DIFFICULTY_INFO[d];
+                const isActive = difficulty === d;
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => setDifficulty(d)}
+                    aria-pressed={isActive}
+                    className={`px-4 py-2.5 rounded-2xl text-sm font-black border-2 transition-colors ${
+                      isActive
+                        ? 'bg-gradient-to-r from-violet-400 to-purple-400 text-slate-950 border-white/30'
+                        : 'bg-slate-950 border-indigo-500/30 text-slate-300 hover:border-white/40'
+                    }`}
+                  >
+                    {info.label}
+                    <span className={`block text-[10px] font-bold ${isActive ? 'text-slate-900' : 'text-slate-500'}`}>
+                      {info.range}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {quiz && !finished && current && (
           <div className="space-y-5">
             <div className="flex justify-between text-xs sm:text-sm font-black text-violet-300">
-              <span>Question {index + 1} of {quiz.length}</span>
+              <span>Question {index + 1} of {quiz.length} · {DIFFICULTY_INFO[difficulty].label}</span>
               <span className="text-amber-300">Score: {score}</span>
             </div>
             <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-violet-400/20">
@@ -461,7 +517,7 @@ export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
               You scored {score} out of {quiz.length}!
             </h3>
             <p className="text-sm sm:text-base text-slate-300 font-bold">
-              {score >= 6 ? '🌟 Fantastic maths skills!' : '🌱 Good try! Use the Operation Explorer above and play again.'}
+              {score >= Math.ceil(quiz.length * 0.7) ? '🌟 Fantastic maths skills!' : '🌱 Good try! Use the Operation Explorer above and play again.'}
             </p>
             <div className="flex justify-center gap-3">
               <button
