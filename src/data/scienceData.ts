@@ -65,6 +65,15 @@ export const QUICK_TOPICS: QuickTopic[] = [
     bgLight: 'bg-orange-50 text-orange-700 border-orange-200',
     description: 'Explore the 7 continents, compare how big they are, and discover famous places and animals from around the world.',
   },
+  {
+    id: 'globe',
+    title: 'The 3D Globe',
+    tagline: 'Spin the Earth and tap a continent',
+    iconName: 'Rotate3d',
+    color: 'from-cyan-500 to-blue-600',
+    bgLight: 'bg-cyan-50 text-cyan-700 border-cyan-200',
+    description: 'Drag a real-looking globe to spin it around, then tap any continent to meet its people, animals and famous places.',
+  },
 ];
 
 export const DIGESTIVE_STEPS: DigestiveStep[] = [

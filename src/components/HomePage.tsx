@@ -16,6 +16,7 @@ import {
   HelpCircle,
   Heart,
   Globe,
+  Rotate3d,
 } from 'lucide-react';
 
 interface HomePageProps {
@@ -43,6 +44,20 @@ const TOPIC_IMAGES: Record<string, { url: string; alt: string }> = {
     url: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?auto=format&fit=crop&q=80&w=800',
     alt: 'Clean blue sky with renewable energy wind turbines',
   },
+    social: {
+    url: 'https://images.unsplash.com/photo-1566341013452-946caa457784?auto=format&fit=crop&q=80&w=800',
+    alt: 'A compass resting on a map',
+  },
+    globe: {
+    url: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800',
+    alt: 'Earth seen from space, showing the African continent through the clouds',
+  },
+};
+
+// Topics without a photo show a big emoji on a coloured background instead
+const TOPIC_PLACEHOLDERS: Record<string, { emoji: string; gradient: string }> = {
+  social: { emoji: '🌍', gradient: 'from-orange-500/40 via-amber-500/20 to-rose-500/30' },
+  globe: { emoji: '🌏', gradient: 'from-cyan-500/40 via-sky-500/20 to-indigo-500/30' },
 };
 
 export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
@@ -62,6 +77,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
         return <ShieldAlert className="w-7 h-7 text-rose-300" />;
       case 'Globe':
         return <Globe className="w-7 h-7 text-orange-300" />;
+      case 'Rotate3d':
+        return <Rotate3d className="w-7 h-7 text-cyan-100" />;
       default:
         return <Atom className="w-7 h-7 text-cyan-300" />;
     }
@@ -81,7 +98,9 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
         return 'bg-gradient-to-tr from-rose-500 to-pink-600 shadow-rose-500/30';
       case 'Globe':
         return 'bg-gradient-to-tr from-orange-500 to-red-500 shadow-orange-500/30';
-      default:
+      case 'Rotate3d':
+        return 'bg-gradient-to-tr from-cyan-400 to-blue-600 shadow-cyan-500/30';
+        default:
         return 'bg-gradient-to-tr from-indigo-500 to-purple-600 shadow-indigo-500/30';
     }
   };
@@ -213,9 +232,10 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:[&>:last-child:nth-child(3n+1)]:col-start-2 gap-8">
           {QUICK_TOPICS.map((topic) => {
             const topicImg = TOPIC_IMAGES[topic.id];
+            const placeholder = TOPIC_PLACEHOLDERS[topic.id];
             return (
               <div
                 key={topic.id}
@@ -232,8 +252,8 @@ export const HomePage: React.FC<HomePageProps> = ({ setActiveTopic }) => {
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90"
                     />
                   )}
-                  {!topicImg && (
-                    <div className="w-full h-full bg-gradient-to-br from-orange-500/40 via-amber-500/20 to-rose-500/30 flex items-center justify-center text-7xl" aria-hidden="true">🌍</div>
+                  {!topicImg && placeholder && (
+                    <div className={`w-full h-full bg-gradient-to-br ${placeholder.gradient} flex items-center justify-center text-7xl`} aria-hidden="true">{placeholder.emoji}</div>
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/30 to-transparent" />
                   <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
