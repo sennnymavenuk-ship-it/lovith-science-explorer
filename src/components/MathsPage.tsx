@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
-import { ArrowLeft, Calculator, Plus, Minus, Award, RotateCcw, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Calculator, Plus, Minus, Award, RotateCcw, HelpCircle, BookOpenText } from 'lucide-react';
 import { TopicId } from '../types';
-import { OPERATIONS, OperationId } from '../data/mathsData';
+import { OPERATIONS, OperationId, WORD_PROBLEMS, WordProblem } from '../data/mathsData';
 
 interface MathsPageProps {
   setActiveTopic: (topic: TopicId) => void;
@@ -147,6 +147,38 @@ export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
   const [difficulty, setDifficulty] = useState<Difficulty>('ones');
+
+  // Separate state for the Word Problems game, so it never interferes with the number-only quiz above.
+  const [wpStarted, setWpStarted] = useState(false);
+  const [wpIndex, setWpIndex] = useState(0);
+  const [wpPicked, setWpPicked] = useState<number | null>(null);
+  const [wpScore, setWpScore] = useState(0);
+  const [wpFinished, setWpFinished] = useState(false);
+
+  const startWordProblems = () => {
+    setWpStarted(true);
+    setWpIndex(0);
+    setWpPicked(null);
+    setWpScore(0);
+    setWpFinished(false);
+  };
+
+  const currentWp: WordProblem | null = wpStarted ? WORD_PROBLEMS[wpIndex] : null;
+
+  const pickWp = (value: number) => {
+    if (!currentWp || wpPicked !== null) return;
+    setWpPicked(value);
+    if (value === currentWp.answer) setWpScore((s) => s + 1);
+  };
+
+  const nextWp = () => {
+    if (wpIndex + 1 >= WORD_PROBLEMS.length) {
+      setWpFinished(true);
+    } else {
+      setWpIndex((i) => i + 1);
+      setWpPicked(null);
+    }
+  };
 
   const colors = OP_COLOR[operation];
 
@@ -523,6 +555,125 @@ export const MathsPage: React.FC<MathsPageProps> = ({ setActiveTopic }) => {
               <button
                 type="button"
                 onClick={startQuiz}
+                className="px-5 py-3 rounded-2xl bg-slate-950 border-2 border-violet-400/30 hover:bg-slate-800 text-white text-sm font-black flex items-center gap-2"
+              >
+                <RotateCcw className="w-4 h-4" aria-hidden="true" />
+                Play Again
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Word Problems */}
+      <section className="bg-slate-900/90 rounded-[36px] p-7 sm:p-9 border-2 border-violet-400/30 shadow-xl space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white flex items-center gap-3">
+              <BookOpenText className="w-7 h-7 text-violet-400" aria-hidden="true" />
+              Word Problems
+            </h2>
+            <p className="text-sm text-slate-300 font-bold mt-1">
+              Real photos and short stories — read carefully to work out which operation to use.
+            </p>
+          </div>
+          {!wpStarted && (
+            <button
+              type="button"
+              onClick={startWordProblems}
+              className="px-6 py-3 rounded-2xl bg-gradient-to-r from-violet-400 to-purple-400 hover:from-violet-300 hover:to-purple-300 text-slate-950 font-black text-sm shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200"
+            >
+              Start Word Problems
+            </button>
+          )}
+        </div>
+
+        {wpStarted && !wpFinished && currentWp && (
+          <div className="space-y-5">
+            <div className="flex justify-between text-xs sm:text-sm font-black text-violet-300">
+              <span>Problem {wpIndex + 1} of {WORD_PROBLEMS.length}</span>
+              <span className="text-amber-300">Score: {wpScore}</span>
+            </div>
+            <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-violet-400/20">
+              <div
+                className="h-full bg-gradient-to-r from-violet-400 to-purple-400 transition-all duration-300"
+                style={{ width: `${((wpIndex + 1) / WORD_PROBLEMS.length) * 100}%` }}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+              <div className="rounded-3xl overflow-hidden border-2 border-violet-400/30 aspect-[4/3]">
+                <img
+                  src={currentWp.image.url}
+                  alt={currentWp.image.alt}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="space-y-4">
+                <p className="text-lg sm:text-xl font-black text-white leading-snug">{currentWp.story}</p>
+                <div className="grid grid-cols-2 gap-3">
+                  {currentWp.options.map((opt) => {
+                    const isPicked = wpPicked === opt;
+                    const isCorrect = opt === currentWp.answer;
+                    let cls = 'bg-slate-950 border-violet-400/20 text-slate-200 hover:border-violet-400';
+                    if (wpPicked !== null) {
+                      if (isCorrect) cls = 'bg-emerald-950 border-emerald-400 text-emerald-200';
+                      else if (isPicked) cls = 'bg-rose-950 border-rose-500 text-rose-200';
+                      else cls = 'bg-slate-950/60 border-slate-800 text-slate-500 opacity-60';
+                    }
+                    return (
+                      <button
+                        key={opt}
+                        type="button"
+                        onClick={() => pickWp(opt)}
+                        className={`p-4 rounded-2xl border-2 text-2xl font-black transition-colors tabular-nums ${cls}`}
+                      >
+                        {opt}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {wpPicked !== null && (
+              <button
+                type="button"
+                onClick={nextWp}
+                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-violet-400 to-purple-400 hover:from-violet-300 hover:to-purple-300 text-slate-950 font-black text-sm shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-200"
+              >
+                {wpIndex + 1 >= WORD_PROBLEMS.length ? 'See My Score' : 'Next Problem →'}
+              </button>
+            )}
+
+            <p className="text-[11px] text-slate-500 font-bold">
+              Photo:{' '}
+              <a href={currentWp.image.creditUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-300">
+                {currentWp.image.credit}
+              </a>{' '}
+              on Unsplash
+            </p>
+          </div>
+        )}
+
+        {wpFinished && (
+          <div className="text-center space-y-5 py-4">
+            <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center border-2 border-amber-400/40">
+              <Award className="w-8 h-8" aria-hidden="true" />
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-black text-white">
+              You scored {wpScore} out of {WORD_PROBLEMS.length}!
+            </h3>
+            <p className="text-sm sm:text-base text-slate-300 font-bold">
+              {wpScore >= Math.ceil(WORD_PROBLEMS.length * 0.7)
+                ? '🌟 You read carefully and solved them all like a pro!'
+                : '🌱 Good try! Read each story slowly and look for the key numbers next time.'}
+            </p>
+            <div className="flex justify-center gap-3">
+              <button
+                type="button"
+                onClick={startWordProblems}
                 className="px-5 py-3 rounded-2xl bg-slate-950 border-2 border-violet-400/30 hover:bg-slate-800 text-white text-sm font-black flex items-center gap-2"
               >
                 <RotateCcw className="w-4 h-4" aria-hidden="true" />
